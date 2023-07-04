@@ -10,8 +10,8 @@ typedef struct {
     double angle;
     double scalex;
     double scaley;
-    double centerx;
-    double centery;
+    double pivotx;
+    double pivoty;
     double quadx;
     double quady;
     double quadw;

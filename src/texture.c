@@ -30,8 +30,8 @@ int create_texture(ItemManager* manager, SDL_Renderer* renderer, const char *pat
     texture->angle = 0;
     texture->scalex = 1;
     texture->scaley = 1;
-    texture->centerx = 0;
-    texture->centery = 0;
+    texture->pivotx = floor(w / 2);
+    texture->pivoty = floor(h / 2);
     texture->quadx = 0;
     texture->quady = 0;
     texture->quadw = w;
@@ -135,52 +135,52 @@ static int getscaley(lua_State* L) {
     return 1;
 }
 
-static int setcenter(lua_State* L) {
+static int setpivot(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     double x = lua_tonumber(L, 2);
     double y = lua_tonumber(L, 3);
     Texture* texture = texture_get_at(manager, texture_index);
 
-    texture->centerx = x;
-    texture->centery = y;
+    texture->pivotx = x;
+    texture->pivoty = y;
     return 0;
 }
-static int setcenterx(lua_State* L) {
+static int setpivotx(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     double x = lua_tonumber(L, 2);
     Texture* texture = texture_get_at(manager, texture_index);
 
-    texture->centerx = x;
+    texture->pivotx = x;
     return 0;
 }
-static int setcentery(lua_State* L) {
+static int setpivoty(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     double y = lua_tonumber(L, 2);
     Texture* texture = texture_get_at(manager, texture_index);
 
-    texture->centery = y;
+    texture->pivoty = y;
     return 0;
 }
-static int getcenter(lua_State* L) {
+static int getpivot(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     Texture* texture = texture_get_at(manager, texture_index);
 
-    lua_pushnumber(L, texture->centerx);
-    lua_pushnumber(L, texture->centery);
+    lua_pushnumber(L, texture->pivotx);
+    lua_pushnumber(L, texture->pivoty);
     return 2;
 }
-static int getcenterx(lua_State* L) {
+static int getpivotx(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     Texture* texture = texture_get_at(manager, texture_index);
 
-    lua_pushnumber(L, texture->centerx);
+    lua_pushnumber(L, texture->pivotx);
     return 1;
 }
-static int getcentery(lua_State* L) {
+static int getpivoty(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     Texture* texture = texture_get_at(manager, texture_index);
 
-    lua_pushnumber(L, texture->centery);
+    lua_pushnumber(L, texture->pivoty);
     return 1;
 }
 
@@ -302,12 +302,12 @@ static const luaL_Reg texture_lib[] = {
     { "setscaley",  setscaley },
     { "getscaley",  getscaley },
 
-    { "setcenter",  setcenter },
-    { "getcenter",  getcenter },
-    { "setcenterx", setcenterx },
-    { "getcenterx", getcenterx },
-    { "setcentery", setcentery },
-    { "getcentery", getcentery },
+    { "setpivot",  setpivot },
+    { "getpivot",  getpivot },
+    { "setpivotx", setpivotx },
+    { "getpivotx", getpivotx },
+    { "setpivoty", setpivoty },
+    { "getpivoty", getpivoty },
 
     { "setfliph",   setfliph },
     { "getfliph",   getfliph },

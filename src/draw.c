@@ -91,12 +91,12 @@ static int texture(lua_State* L) {
         (int)texture->quadh
     };
     SDL_Rect dst = (SDL_Rect){ 
-        x, 
-        y, 
+        x - texture->pivotx * texture->scalex, 
+        y - texture->pivoty * texture->scaley, 
         w * texture->scalex, 
         h * texture->scaley 
     };
-    SDL_Point center = (SDL_Point){ texture->centerx * texture->scalex, texture->centery * texture->scaley };
+    SDL_Point center = (SDL_Point){ texture->pivotx * texture->scalex, texture->pivoty * texture->scaley };
     SDL_RendererFlip flip = SDL_FLIP_NONE;
     if (texture->fliph)
         flip |= SDL_FLIP_HORIZONTAL;

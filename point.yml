@@ -216,26 +216,26 @@ globals:
   point.texture.getscaley:
     args:
       - type: number
-  point.texture.setcenter:
+  point.texture.setpivot:
     args:
       - type: number
       - type: number
       - type: number
-  point.texture.getcenter:
+  point.texture.getpivot:
     args:
       - type: number
-  point.texture.setcenterx:
-    args:
-      - type: number
-      - type: number
-  point.texture.getcenterx:
-    args:
-      - type: number
-  point.texture.setcentery:
+  point.texture.setpivotx:
     args:
       - type: number
       - type: number
-  point.texture.getcentery:
+  point.texture.getpivotx:
+    args:
+      - type: number
+  point.texture.setpivoty:
+    args:
+      - type: number
+      - type: number
+  point.texture.getpivoty:
     args:
       - type: number
   point.texture.setangle:

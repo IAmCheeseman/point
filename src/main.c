@@ -86,6 +86,15 @@ static void main_loop(EngineState* engine) {
 }
 
 int main(int argc, char* args[]) {
+    if (argc == 2 && (strcmp(args[1], "--version") == 0 || strcmp(args[1], "-v") == 0)) {
+        printf("Point v%s\n", VERSION_STR);
+        exit(0);
+    } else if (argc != 1) {
+        printf("point help:\n");
+        printf("\t-v, --version: returns point version.\n");
+        exit(1);
+    }
+
     EngineState* engine = create_engine();
 
     int res = luaL_dofile(engine->L, "main.lua");

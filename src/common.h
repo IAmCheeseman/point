@@ -11,4 +11,9 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#define VERSION_MAJOR 0
+#define VERSION_MINOR 0
+#define VERSION_PATCH 1
+#define VERSION_STR "0.0.1"
+
 #endif

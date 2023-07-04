@@ -75,7 +75,7 @@ Texture* texture_get_at(TextureManager* manager, int index) {
 TextureManager* manager;
 SDL_Renderer* sdl_renderer;
 
-int load(lua_State* L) {
+static int load(lua_State* L) {
     const char* path = lua_tostring(L, 1);
     create_texture(manager, sdl_renderer, path);
     lua_pushnumber(L, manager->texture_count - 1);
@@ -83,7 +83,7 @@ int load(lua_State* L) {
     return 1;
 }
 
-int setscale(lua_State* L) {
+static int setscale(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     double x = lua_tonumber(L, 2);
     double y = lua_tonumber(L, 3);
@@ -93,7 +93,7 @@ int setscale(lua_State* L) {
     texture->scaley = y;
     return 0;
 }
-int setscalex(lua_State* L) {
+static int setscalex(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     double x = lua_tonumber(L, 2);
     Texture* texture = texture_get_at(manager, texture_index);
@@ -101,7 +101,7 @@ int setscalex(lua_State* L) {
     texture->scalex = x;
     return 0;
 }
-int setscaley(lua_State* L) {
+static int setscaley(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     double y = lua_tonumber(L, 2);
     Texture* texture = texture_get_at(manager, texture_index);
@@ -109,7 +109,7 @@ int setscaley(lua_State* L) {
     texture->scaley = y;
     return 0;
 }
-int getscale(lua_State* L) {
+static int getscale(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     Texture* texture = texture_get_at(manager, texture_index);
 
@@ -117,14 +117,14 @@ int getscale(lua_State* L) {
     lua_pushnumber(L, texture->scaley);
     return 2;
 }
-int getscalex(lua_State* L) {
+static int getscalex(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     Texture* texture = texture_get_at(manager, texture_index);
 
     lua_pushnumber(L, texture->scalex);
     return 1;
 }
-int getscaley(lua_State* L) {
+static int getscaley(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     Texture* texture = texture_get_at(manager, texture_index);
 
@@ -132,7 +132,7 @@ int getscaley(lua_State* L) {
     return 1;
 }
 
-int setcenter(lua_State* L) {
+static int setcenter(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     double x = lua_tonumber(L, 2);
     double y = lua_tonumber(L, 3);
@@ -142,7 +142,7 @@ int setcenter(lua_State* L) {
     texture->centery = y;
     return 0;
 }
-int setcenterx(lua_State* L) {
+static int setcenterx(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     double x = lua_tonumber(L, 2);
     Texture* texture = texture_get_at(manager, texture_index);
@@ -150,7 +150,7 @@ int setcenterx(lua_State* L) {
     texture->centerx = x;
     return 0;
 }
-int setcentery(lua_State* L) {
+static int setcentery(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     double y = lua_tonumber(L, 2);
     Texture* texture = texture_get_at(manager, texture_index);
@@ -158,7 +158,7 @@ int setcentery(lua_State* L) {
     texture->centery = y;
     return 0;
 }
-int getcenter(lua_State* L) {
+static int getcenter(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     Texture* texture = texture_get_at(manager, texture_index);
 
@@ -166,14 +166,14 @@ int getcenter(lua_State* L) {
     lua_pushnumber(L, texture->centery);
     return 2;
 }
-int getcenterx(lua_State* L) {
+static int getcenterx(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     Texture* texture = texture_get_at(manager, texture_index);
 
     lua_pushnumber(L, texture->centerx);
     return 1;
 }
-int getcentery(lua_State* L) {
+static int getcentery(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     Texture* texture = texture_get_at(manager, texture_index);
 
@@ -181,7 +181,7 @@ int getcentery(lua_State* L) {
     return 1;
 }
 
-int setfliph(lua_State* L) {
+static int setfliph(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     bool flipped = lua_toboolean(L, 2);
     Texture* texture = texture_get_at(manager, texture_index);
@@ -189,7 +189,7 @@ int setfliph(lua_State* L) {
     texture->fliph = flipped;
     return 0;
 }
-int getfliph(lua_State* L) {
+static int getfliph(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     Texture* texture = texture_get_at(manager, texture_index);
 
@@ -197,7 +197,7 @@ int getfliph(lua_State* L) {
     return 1;
 }
 
-int setflipv(lua_State* L) {
+static int setflipv(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     bool flipped = lua_toboolean(L, 2);
     Texture* texture = texture_get_at(manager, texture_index);
@@ -205,7 +205,7 @@ int setflipv(lua_State* L) {
     texture->flipv = flipped;
     return 0;
 }
-int getflipv(lua_State* L) {
+static int getflipv(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     Texture* texture = texture_get_at(manager, texture_index);
 
@@ -213,7 +213,7 @@ int getflipv(lua_State* L) {
     return 1;
 }
 
-int setangle(lua_State* L) {
+static int setangle(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     double angle = lua_tonumber(L, 2);
     Texture* texture = texture_get_at(manager, texture_index);
@@ -221,7 +221,7 @@ int setangle(lua_State* L) {
     texture->angle = angle;
     return 0;
 }
-int getangle(lua_State* L) {
+static int getangle(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     Texture* texture = texture_get_at(manager, texture_index);
 
@@ -229,7 +229,7 @@ int getangle(lua_State* L) {
     return 1;
 }
 
-int getquad(lua_State* L) {
+static int getquad(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     int x = lua_tonumber(L, 2);
     int y = lua_tonumber(L, 3);
@@ -243,7 +243,7 @@ int getquad(lua_State* L) {
     texture->quadh = h;
     return 0;
 }
-int setquad(lua_State* L) {
+static int setquad(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     Texture* texture = texture_get_at(manager, texture_index);
 
@@ -254,7 +254,7 @@ int setquad(lua_State* L) {
     return 4;
 }
 
-int gettexturesize(lua_State* L) {
+static int gettexturesize(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     Texture* texture = texture_get_at(manager, texture_index);
 
@@ -266,7 +266,7 @@ int gettexturesize(lua_State* L) {
     return 2;
 }
 
-int getwidth(lua_State* L) {
+static int getwidth(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     Texture* texture = texture_get_at(manager, texture_index);
 
@@ -276,7 +276,7 @@ int getwidth(lua_State* L) {
     lua_pushinteger(L, w);
     return 1;
 }
-int getheight(lua_State* L) {
+static int getheight(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     Texture* texture = texture_get_at(manager, texture_index);
 
@@ -287,7 +287,7 @@ int getheight(lua_State* L) {
     return 1;
 }
 
-const luaL_Reg texture_lib[] = {
+static const luaL_Reg texture_lib[] = {
     { "load", load },
 
     { "setscale",   setscale },

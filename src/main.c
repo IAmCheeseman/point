@@ -4,7 +4,7 @@
 #include "engine.h"
 #include "luahelpers.h"
 
-void process_events(EngineState* engine) {
+static void process_events(EngineState* engine) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
@@ -20,7 +20,7 @@ void process_events(EngineState* engine) {
     }
 }
 
-void process(EngineState* engine, double delta) {
+static void process(EngineState* engine, double delta) {
     lua_getglobal(engine->L, "point");
     luaL_checktype(engine->L, -1, LUA_TTABLE);
 
@@ -32,7 +32,7 @@ void process(EngineState* engine, double delta) {
     lua_pop(engine->L, 1); // Table
 }
 
-void draw(EngineState* engine) {
+static void draw(EngineState* engine, int x, int y, int w, int h) {
     // Start rendering
     engine->renderer.is_rendering = true;
     SDL_SetRenderTarget(engine->renderer.sdl_renderer, engine->renderer.target);
@@ -56,7 +56,7 @@ void draw(EngineState* engine) {
     engine->renderer.is_rendering = false;
 }
 
-void main_loop(EngineState* engine) {
+static void main_loop(EngineState* engine) {
     double now = SDL_GetPerformanceCounter();
     double prev = 0;
     while (!engine->window.should_close) {
@@ -83,8 +83,8 @@ void main_loop(EngineState* engine) {
         now = SDL_GetPerformanceCounter();
         double delta = ((double)((now - prev) * 1000 / (double)SDL_GetPerformanceFrequency()) * 0.001);
 
-        process(engine);
-        draw(engine)
+        process(engine, delta);
+        draw(engine, x, y, w, h);
     }
 }
 
@@ -99,7 +99,7 @@ int main(int argc, char* args[]) {
 
     call_lua_table_func(engine->L, engine->traceback_location, "point", "onload", 0);
 
-    
+    main_loop(engine);
 
     free_engine(engine);   
 

@@ -53,14 +53,14 @@ void handle_events(EventHandler* handler, lua_State* L, int traceback_index, SDL
 
 EventHandler* handler;
 
-int iskeydown(lua_State* L) {
+static int iskeydown(lua_State* L) {
     int keycode = lua_tointeger(L, 1);
     lua_pushboolean(L, handler->keys_pressed[keycode]);
 
     return 1;
 }
 
-int ismousedown(lua_State* L) {
+static int ismousedown(lua_State* L) {
     int button = lua_tointeger(L, 1);
     button = button < 1 ? 1 : button;
     button = button > 5 ? 5 : button;
@@ -69,14 +69,14 @@ int ismousedown(lua_State* L) {
     return 1;
 }
 
-int getmousepos(lua_State* L) {
+static int getmousepos(lua_State* L) {
     lua_pushinteger(L, handler->mouse_x);
     lua_pushinteger(L, handler->mouse_y);
 
     return 2;
 }
 
-int getglobalmousepos(lua_State* L) {
+static int getglobalmousepos(lua_State* L) {
     int x, y;
     SDL_GetGlobalMouseState(&x, &y);
 
@@ -86,7 +86,7 @@ int getglobalmousepos(lua_State* L) {
     return 2;
 }
 
-const luaL_Reg input[] = {
+static const luaL_Reg input[] = {
     { "getmousepos", getmousepos },
     { "getglobalmousepos", getglobalmousepos },
     { "iskeydown", iskeydown },

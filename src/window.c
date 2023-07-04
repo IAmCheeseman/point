@@ -26,21 +26,21 @@ void free_window(Window* window) {
 
 Window* window;
 
-int settitle(lua_State* L) {
+static int settitle(lua_State* L) {
     const char* title = lua_tostring(L, 1);
     SDL_SetWindowTitle(window->sdl_window, title);
 
     return 0;
 }
 
-int gettitle(lua_State* L) {
+static int gettitle(lua_State* L) {
     const char* title = SDL_GetWindowTitle(window->sdl_window);
     lua_pushstring(L, title);
 
     return 1;
 }
 
-int getpos(lua_State* L) {
+static int getpos(lua_State* L) {
     int x, y;
     SDL_GetWindowPosition(window->sdl_window, &x, &y);
     
@@ -50,7 +50,7 @@ int getpos(lua_State* L) {
     return 2;
 }
 
-int setpos(lua_State* L) {
+static int setpos(lua_State* L) {
     int x = lua_tointeger(L, 1);
     int y = lua_tointeger(L, 2);
     SDL_SetWindowPosition(window->sdl_window, x, y);
@@ -58,7 +58,7 @@ int setpos(lua_State* L) {
     return 0;
 }
 
-int getsize(lua_State* L) {
+static int getsize(lua_State* L) {
     int w, h;
     SDL_GetWindowSize(window->sdl_window, &w, &h);
     
@@ -68,7 +68,7 @@ int getsize(lua_State* L) {
     return 2;
 }
 
-int setsize(lua_State* L) {
+static int setsize(lua_State* L) {
     int w = lua_tointeger(L, 1);
     int h = lua_tointeger(L, 2);
     SDL_SetWindowSize(window->sdl_window, w, h);
@@ -76,18 +76,18 @@ int setsize(lua_State* L) {
     return 0;
 }
 
-int exit_window(lua_State* L) {
+static int exit_window(lua_State* L) {
     window->should_close = true;
 
     return 0;
 }
 
-int center(lua_State* L) {
+static int center(lua_State* L) {
     SDL_SetWindowPosition(window->sdl_window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
     return 0;
 }
 
-int setfullscreen(lua_State* L) {
+static int setfullscreen(lua_State* L) {
     bool in_fullscreen = lua_toboolean(L, 1);
     const char* mode = luaL_optstring(L, 2, "desktop");
 
@@ -108,12 +108,12 @@ int setfullscreen(lua_State* L) {
     return 0;
 }
 
-int getfullscreen(lua_State* L) {
+static int getfullscreen(lua_State* L) {
     lua_pushboolean(L, window->is_fullscreen);
     return 1;
 }
 
-const luaL_Reg window_lib[] = {
+static const luaL_Reg window_lib[] = {
     { "exit", exit_window },
     { "center", center },
     { "settitle", settitle },

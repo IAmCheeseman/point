@@ -4,7 +4,7 @@
 Renderer* renderer = NULL;
 TextureManager* texture_manager = NULL;
 
-int rect(lua_State* L) {
+static int rect(lua_State* L) {
     int x = lua_tonumber(L, 1);
     int y = lua_tonumber(L, 2);
     int w = lua_tonumber(L, 3);
@@ -20,7 +20,7 @@ int rect(lua_State* L) {
     return 0;
 }
 
-int fillrect(lua_State* L) {
+static int fillrect(lua_State* L) {
     int x = lua_tonumber(L, 1);
     int y = lua_tonumber(L, 2);
     int w = lua_tonumber(L, 3);
@@ -36,7 +36,7 @@ int fillrect(lua_State* L) {
     return 0;
 }
 
-int clear(lua_State* L) {
+static int clear(lua_State* L) {
     if (SDL_RenderClear(renderer->sdl_renderer) < 0) {
         fprintf(stderr, "Failed to clear: %s\n", SDL_GetError());
         exit(1);
@@ -45,7 +45,7 @@ int clear(lua_State* L) {
     return 0;
 }
 
-int setcolor(lua_State* L) {
+static int setcolor(lua_State* L) {
     int r = (int)(lua_tonumber(L, 1) * 255);
     int g = (int)(lua_tonumber(L, 2) * 255);
     int b = (int)(lua_tonumber(L, 3) * 255);
@@ -59,7 +59,7 @@ int setcolor(lua_State* L) {
     return 0;
 }
 
-int line(lua_State* L) {
+static int line(lua_State* L) {
     int sx = lua_tonumber(L, 1);
     int sy = lua_tonumber(L, 2);
     int ex = lua_tonumber(L, 3);
@@ -73,7 +73,7 @@ int line(lua_State* L) {
     return 0;
 }
 
-int texture(lua_State* L) {
+static int texture(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     int x = lua_tonumber(L, 2);
     int y = lua_tonumber(L, 3);
@@ -107,20 +107,20 @@ int texture(lua_State* L) {
     return 0;
 }
 
-int setpixelperfect(lua_State* L) {
+static int setpixelperfect(lua_State* L) {
     bool state = lua_toboolean(L, 1);
     renderer->is_pixel_perfect = state;
 
     return 0;
 }
 
-int getpixelperfect(lua_State* L) {
+static int getpixelperfect(lua_State* L) {
     lua_pushboolean(L, renderer->is_pixel_perfect);
 
     return 1;
 }
 
-int setscreensize(lua_State* L) {
+static int setscreensize(lua_State* L) {
     int w = lua_tonumber(L, 1);
     int h = lua_tonumber(L, 2);
 
@@ -134,7 +134,7 @@ int setscreensize(lua_State* L) {
     return 0;
 }
 
-int getscreensize(lua_State* L) {
+static int getscreensize(lua_State* L) {
     lua_pushnumber(L, renderer->screen_width);
     lua_pushnumber(L, renderer->screen_height);
 

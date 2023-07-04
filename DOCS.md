@@ -9,6 +9,7 @@ Temp docs for y'all
 - `onload()` - called when everything is set up
 - `onstep(dt)` - called every frame
 - `ondraw()` - called when you should draw
+- TODO: mouse callbacks, window callbacks
 
 ## point.input
 

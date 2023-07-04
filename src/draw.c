@@ -96,7 +96,7 @@ static int texture(lua_State* L) {
         w * texture->scalex, 
         h * texture->scaley 
     };
-    SDL_Point center = (SDL_Point){ texture->centerx, texture->centery };
+    SDL_Point center = (SDL_Point){ texture->centerx * texture->scalex, texture->centery * texture->scaley };
     SDL_RendererFlip flip = SDL_FLIP_NONE;
     if (texture->fliph)
         flip |= SDL_FLIP_HORIZONTAL;

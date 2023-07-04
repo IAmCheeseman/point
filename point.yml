@@ -255,6 +255,20 @@ globals:
   point.texture.getquad:
     args:
       - type: number
+  point.texture.setfliph:
+    args:
+      - type: number
+      - type: boolean
+  point.texture.getfliph:
+    args:
+      - type: number
+  point.texture.setflipv:
+    args:
+      - type: number
+      - type: boolean
+  point.texture.getflipv:
+    args:
+      - type: number
 
   point.texture.getsize:
     args:

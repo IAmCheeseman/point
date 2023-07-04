@@ -10,6 +10,13 @@ globals:
     property: read-only
     any: true
 
+  point.time.timerunning:
+    args: []
+    must_use: true
+  point.time.deltatime:
+    args: []
+    must_use: true
+
   point.input.getmousepos:
     args: []
     must_use: true

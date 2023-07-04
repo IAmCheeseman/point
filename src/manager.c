@@ -1,5 +1,13 @@
 #include "manager.h"
 
+void init_item_manager(ItemManager* manager, size_t size) {
+    manager->capacity = 8;
+    manager->count = 0;
+    manager->items = malloc(size * manager->capacity);
+    for (int i = manager->count; i < manager->capacity; i++)
+        manager->items[i] = NULL;
+}
+
 void item_manager_resize(ItemManager* manager, size_t size) {
     if (manager->count + 1 > manager->capacity) {
         manager->capacity *= 1.5;

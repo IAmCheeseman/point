@@ -9,6 +9,7 @@ typedef struct {
     void** items;
 } ItemManager;
 
+#define ITEM_MANAGER_INITIALIZE(manager, type) (init_item_manager(manager, sizeof(type*)))
 #define ITEM_MANAGER_RESIZE(manager, type) (item_manager_resize(manager, sizeof(type*)))
 #define ITEM_MANAGER_FREE(free_func, type) \
     do { \
@@ -24,6 +25,7 @@ typedef struct {
         manager->items = NULL; \
     } while (false)
 
+void init_item_manager(ItemManager* manager, size_t size);
 void item_manager_resize(ItemManager* manager, size_t size);
 int item_manager_set(ItemManager* manager, void* item);
 void* item_manager_get(ItemManager* manager, int index, const char* item_name);

@@ -1,11 +1,7 @@
 #include "texture.h"
 
 void init_texture_manager(ItemManager* manager) {
-    manager->capacity = 8;
-    manager->count = 0;
-    manager->items = malloc(sizeof(Texture*) * manager->capacity);
-    for (int i = manager->count; i < manager->capacity; i++)
-        manager->items[i] = NULL;
+    ITEM_MANAGER_INITIALIZE(manager, Texture);
 }
 
 int create_texture(ItemManager* manager, SDL_Renderer* renderer, const char *path) {

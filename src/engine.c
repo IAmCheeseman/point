@@ -76,8 +76,6 @@ double get_screen_scale(EngineState* engine) {
     int ww, wh;
     SDL_GetWindowSize(engine->window.sdl_window, &ww, &wh);
 
-    SDL_Rect src = (SDL_Rect) { 0, 0, ww, wh };
-
     int w = ww + sw;
     int h = wh + sh;
 

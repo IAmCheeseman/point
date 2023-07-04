@@ -31,7 +31,6 @@ int create_texture(ItemManager* manager, SDL_Renderer* renderer, const char *pat
 void free_texture(Texture* texture);
 void free_texture_manager(ItemManager* manager);
 Texture* texture_get_at(ItemManager* manager, int index);
-bool texture_index_is_valid(ItemManager* manager, int index);
 
 void init_texture_lib(lua_State *L, ItemManager* texture_manager, SDL_Renderer* sdl_renderer);
 

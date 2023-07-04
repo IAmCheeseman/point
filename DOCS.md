@@ -2,6 +2,14 @@
 
 Temp docs for y'all
 
+## callbacks
+
+- `onkeydown(key, isrepeat)` - called when a key is pressed
+- `onkeyup(key)` - called when a key is released
+- `onload()` - called when everything is set up
+- `onstep(dt)` - called every frame
+- `ondraw()` - called when you should draw
+
 ## point.input
 
 - `getmousepos()` - returns the x and y of the mouse

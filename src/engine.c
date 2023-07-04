@@ -72,7 +72,12 @@ EngineState *create_engine() {
     "function point.onstep() end\n"
     "function point.ondraw() end\n"
     "function point.onkeydown(_, _) end\n"
-    "function point.onkeyup(_) end\n");
+    "function point.onkeyup(_) end\n"
+    "function point.onmousemove(_, _, _, _) end\n"
+    "function point.onwindowfocused() end\n"
+    "function point.onwindowunfocused() end\n"
+    "function point.onwindowresized(_, _) end\n"
+    "function point.onwindowmoved(_, _) end\n");
 
     return engine;
 }

@@ -46,6 +46,59 @@ void handle_events(EventHandler* handler, lua_State* L, int traceback_index, SDL
             handler->mouse_pressed[event.button.button] = false;
             break;
         }
+        case SDL_MOUSEMOTION: {
+            handler->keys_pressed[event.key.keysym.scancode] = false;
+            lua_getfield(L, -1, "onmousemove");
+            luaL_checktype(L, -1, LUA_TFUNCTION);
+        
+            lua_pushinteger(L, handler->mouse_x);
+            lua_pushinteger(L, handler->mouse_y);
+            lua_pushinteger(L, event.motion.xrel);
+            lua_pushinteger(L, event.motion.yrel);
+            call_lua_func(L, traceback_index, 4, 0);
+
+            break;
+        }
+        case SDL_WINDOWEVENT: {
+            switch (event.window.event) {
+                case SDL_WINDOWEVENT_FOCUS_GAINED: {
+                    lua_getfield(L, -1, "onwindowfocused");
+                    luaL_checktype(L, -1, LUA_TFUNCTION);
+                
+                    call_lua_func(L, traceback_index, 0, 0);
+
+                    break;
+                }
+                case SDL_WINDOWEVENT_FOCUS_LOST: {
+                    lua_getfield(L, -1, "onwindowunfocused");
+                    luaL_checktype(L, -1, LUA_TFUNCTION);
+                
+                    call_lua_func(L, traceback_index, 0, 0);
+
+                    break;
+                }
+                case SDL_WINDOWEVENT_RESIZED: {
+                    lua_getfield(L, -1, "onwindowresized");
+                    luaL_checktype(L, -1, LUA_TFUNCTION);
+
+                    lua_pushinteger(L, event.window.data1);
+                    lua_pushinteger(L, event.window.data2);
+                    call_lua_func(L, traceback_index, 2, 0);
+
+                    break;
+                }
+                case SDL_WINDOWEVENT_MOVED: {
+                    lua_getfield(L, -1, "onwindowmoved");
+                    luaL_checktype(L, -1, LUA_TFUNCTION);
+
+                    lua_pushinteger(L, event.window.data1);
+                    lua_pushinteger(L, event.window.data2);
+                    call_lua_func(L, traceback_index, 2, 0);
+
+                    break;
+                }
+            }
+        }
     }
 
     lua_pop(L, 1); // Table

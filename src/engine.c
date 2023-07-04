@@ -45,6 +45,7 @@ EngineState *create_engine() {
     init_renderer(&engine->renderer, &engine->window);
     init_event_handler(&engine->event_handler);
     init_texture_manager(&engine->texture_manager);
+    init_font_manager(&engine->font_manager);
 
     // Init lua
     engine->L = luaL_newstate();
@@ -61,6 +62,7 @@ EngineState *create_engine() {
     init_event_libs(engine->L, &engine->event_handler);
     init_vector_lib(engine->L);
     init_texture_lib(engine->L, &engine->texture_manager, engine->renderer.sdl_renderer);
+    init_font_lib(engine->L, &engine->font_manager);
     init_time_lib(engine);
 
     lua_setglobal(engine->L, "point");

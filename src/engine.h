@@ -7,12 +7,14 @@
 #include "window.h"
 #include "events.h"
 #include "texture.h"
+#include "font.h"
 
 typedef struct {
     Window window;
     Renderer renderer;
     EventHandler event_handler;
     ItemManager texture_manager;
+    ItemManager font_manager;
     lua_State* L;
     int traceback_location;
     double now;

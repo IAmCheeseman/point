@@ -1,8 +1,9 @@
 #include <math.h>
 #include "draw.h"
 
-Renderer* renderer = NULL;
-ItemManager* texture_manager = NULL;
+static Renderer* renderer = NULL;
+static ItemManager* texture_manager = NULL;
+static ItemManager* font_manager = NULL;
 
 static int rect(lua_State* L) {
     int x = lua_tonumber(L, 1);
@@ -107,6 +108,39 @@ static int texture(lua_State* L) {
     return 0;
 }
 
+static int text(lua_State* L) {
+    int font_index = lua_tonumber(L, 1);
+    const char* text = lua_tostring(L, 2);
+    int x = lua_tonumber(L, 3);
+    int y = lua_tonumber(L, 4);
+
+    Font* font = font_get_at(font_manager, font_index);
+
+    SDL_Color color;
+    SDL_GetRenderDrawColor(renderer->sdl_renderer, &color.r, &color.g, &color.b, &color.a);
+    SDL_Surface* text_surface = TTF_RenderText_Blended(font->sdl_font, text, color);
+    if (text_surface == NULL) {
+        fprintf(stderr, "Failed to render text: %s\n", TTF_GetError());
+        exit(1);
+    }
+    SDL_Texture* text_texture = SDL_CreateTextureFromSurface(renderer->sdl_renderer, text_surface);
+    if (text_texture == NULL) {
+        fprintf(stderr, "Failed to render text: %s\n", SDL_GetError());
+        exit(1);
+    }
+
+    int w, h;
+    SDL_QueryTexture(text_texture, NULL, NULL, &w, &h);
+
+    SDL_Rect dst = (SDL_Rect){ x, y, w, h };
+    SDL_RenderCopy(renderer->sdl_renderer, text_texture, NULL, &dst);
+
+    SDL_DestroyTexture(text_texture);
+    SDL_FreeSurface(text_surface);
+
+    return 0;
+}
+
 static int setpixelperfect(lua_State* L) {
     bool state = lua_toboolean(L, 1);
     renderer->is_pixel_perfect = state;
@@ -152,12 +186,14 @@ static const luaL_Reg draw[] = {
     { "rect", rect },
     { "fillrect", fillrect },
     { "texture", texture },
+    { "text", text },
     { NULL, NULL },
 };
 
 void init_draw_lib(lua_State *L, EngineState* engine) {
     renderer = &engine->renderer;
     texture_manager = &engine->texture_manager;
+    font_manager = &engine->font_manager;
 
     // lua_getglobal(L, "point");
     luaL_newlib(L, draw);

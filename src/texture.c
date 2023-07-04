@@ -56,8 +56,8 @@ Texture* texture_get_at(ItemManager* manager, int index) {
     return (Texture*)item_manager_get(manager, index, "texture");
 }
 
-ItemManager* manager;
-SDL_Renderer* sdl_renderer;
+static ItemManager* manager;
+static SDL_Renderer* sdl_renderer;
 
 static int load(lua_State* L) {
     const char* path = lua_tostring(L, 1);

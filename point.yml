@@ -77,6 +77,12 @@ globals:
       - type: number
       - type: number
       - type: number
+  point.draw.text:
+    args:
+      - type: number
+      - type: string
+      - type: number
+      - type: number
 
   point.vector.length:
     args:
@@ -251,4 +257,9 @@ globals:
       - type: number
   point.texture.getheight:
     args:
+      - type: number
+
+  point.font.load:
+    args:
+      - type: string
       - type: number

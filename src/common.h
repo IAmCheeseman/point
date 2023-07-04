@@ -11,6 +11,4 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#define DEBUG_MESSAGES
-
 #endif

@@ -108,14 +108,7 @@ static int texture(lua_State* L) {
     return 0;
 }
 
-static int text(lua_State* L) {
-    int font_index = lua_tonumber(L, 1);
-    const char* text = lua_tostring(L, 2);
-    int x = lua_tonumber(L, 3);
-    int y = lua_tonumber(L, 4);
-
-    Font* font = font_get_at(font_manager, font_index);
-
+void render_text(Font* font, const char* text, int x, int y) {
     SDL_Color color;
     SDL_GetRenderDrawColor(renderer->sdl_renderer, &color.r, &color.g, &color.b, &color.a);
     SDL_Surface* text_surface = TTF_RenderText_Blended(font->sdl_font, text, color);
@@ -137,6 +130,36 @@ static int text(lua_State* L) {
 
     SDL_DestroyTexture(text_texture);
     SDL_FreeSurface(text_surface);
+}
+
+static int text(lua_State* L) {
+    int font_index = lua_tonumber(L, 1);
+    const char* text = lua_tostring(L, 2);
+    int x = lua_tonumber(L, 3);
+    int y = lua_tonumber(L, 4);
+
+    Font* font = font_get_at(font_manager, font_index);
+
+    render_text(font, text, x, y);
+
+    return 0;
+}
+
+static int textlines(lua_State* L) {
+    int font_index = lua_tonumber(L, 1);
+    int x = lua_tonumber(L, 2);
+    int y = lua_tonumber(L, 3);
+    int spacing = lua_tonumber(L, 4);
+
+    Font* font = font_get_at(font_manager, font_index);
+    
+    int length = lua_rawlen(L, 5);
+
+    for (int i = 1; i <= length; i++) {
+        lua_rawgeti(L, 5, i);
+        const char* text = lua_tostring(L, -1);
+        render_text(font, text, x, y + (i - 1) * 12 + spacing * (i - 1));
+    }
 
     return 0;
 }
@@ -187,6 +210,7 @@ static const luaL_Reg draw[] = {
     { "fillrect", fillrect },
     { "texture", texture },
     { "text", text },
+    { "textlines", textlines },
     { NULL, NULL },
 };
 

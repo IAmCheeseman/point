@@ -83,6 +83,13 @@ globals:
       - type: string
       - type: number
       - type: number
+  point.draw.textlines:
+    args:
+      - type: number
+      - type: number
+      - type: number
+      - type: number
+      - type: table
 
   point.vector.length:
     args:

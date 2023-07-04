@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.26)
 
-set(CMAKE_C_FLAGS "-fsanitize=address")
+set(CMAKE_C_FLAGS "-fsanitize=address -Wall")
 
 project(point)
 file(GLOB_RECURSE SRC src/*.c)

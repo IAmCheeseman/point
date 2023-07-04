@@ -1,0 +1,194 @@
+---
+base: lua53
+globals:
+  point:
+    property: read-only
+  point.key:
+    property: read-only
+    any: true
+  point.mouse:
+    property: read-only
+    any: true
+
+  point.input.getmousepos:
+    args: []
+    must_use: true
+  point.input.getglobalmousepos:
+    args: []
+    must_use: true
+  point.input.iskeydown:
+    args:
+      - type: number
+    must_use: true
+  point.input.ismousedown:
+    args:
+      - type: number
+    must_use: true
+  
+  point.draw.setscreensize:
+    args:
+      - type: number
+      - type: number
+  point.draw.getscreensize:
+    args: []
+    must_use: true
+  point.draw.getpixelperfect:
+    args: []
+    must_use: true
+  point.draw.setpixelperfect:
+    args:
+      - type: bool
+  point.draw.clear:
+    args: []
+  point.draw.setcolor:
+    args:
+      - type: number
+      - type: number
+      - type: number
+      - type: number
+        required: false
+  point.draw.line:
+    args:
+      - type: number
+      - type: number
+      - type: number
+      - type: number
+  point.draw.rect:
+    args:
+      - type: number
+      - type: number
+      - type: number
+      - type: number
+  point.draw.fillrect:
+    args:
+      - type: number
+      - type: number
+      - type: number
+      - type: number
+  point.draw.texture:
+    args:
+      - type: number
+      - type: number
+      - type: number
+
+  point.vector.length:
+    args:
+      - type: number
+      - type: number
+    must_use: true
+  point.vector.normalized:
+    args:
+      - type: number
+      - type: number
+    must_use: true
+
+  point.window.exit:
+    args: []
+  point.window.center:
+    args: []
+  point.window.settitle:
+    args:
+      - type: string
+  point.window.gettitle:
+    args: []
+    must_use: true
+  point.window.getpos:
+    args: []
+    must_use: true
+  point.window.setpos:
+    args:
+      - type: number
+      - type: number
+  point.window.getsize:
+    args: []
+    must_use: true
+  point.window.setsize:
+    args:
+      - type: number
+      - type: number
+  point.window.getfullscreen:
+    args: []
+    must_use: true
+  point.window.setfullscreen:
+    args:
+      - type: bool
+      - type: 
+        - fullscreen
+        - desktop
+        required: false
+  
+  point.texture.load:
+    args:
+      - type: string
+    must_use: true
+  point.texture.setscale:
+    args:
+      - type: number
+      - type: number
+      - type: number
+  point.texture.getscale:
+    args:
+      - type: number
+  point.texture.setscalex:
+    args:
+      - type: number
+      - type: number
+  point.texture.getscalex:
+    args:
+      - type: number
+  point.texture.setscaley:
+    args:
+      - type: number
+      - type: number
+  point.texture.getscaley:
+    args:
+      - type: number
+  point.texture.setcenter:
+    args:
+      - type: number
+      - type: number
+      - type: number
+  point.texture.getcenter:
+    args:
+      - type: number
+  point.texture.setcenterx:
+    args:
+      - type: number
+      - type: number
+  point.texture.getcenterx:
+    args:
+      - type: number
+  point.texture.setcentery:
+    args:
+      - type: number
+      - type: number
+  point.texture.getcentery:
+    args:
+      - type: number
+  point.texture.setangle:
+    args:
+      - type: number
+      - type: number
+  point.texture.getangle:
+    args:
+      - type: number
+  point.texture.setquad:
+    args:
+      - type: number
+      - type: number
+      - type: number
+      - type: number
+      - type: number
+  point.texture.getquad:
+    args:
+      - type: number
+
+  point.texture.getsize:
+    args:
+      - type: number
+  point.texture.getwidth:
+    args:
+      - type: number
+  point.texture.getheight:
+    args:
+      - type: number

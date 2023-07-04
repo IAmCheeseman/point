@@ -84,10 +84,10 @@ static int texture(lua_State* L) {
     SDL_QueryTexture(texture->sdl_texture, NULL, NULL, &w, &h);
 
     SDL_Rect src = (SDL_Rect){ 
-        texture->quadx, 
-        texture->quady, 
-        texture->quadw,
-        texture->quadh
+        (int)texture->quadx, 
+        (int)texture->quady, 
+        (int)texture->quadw,
+        (int)texture->quadh
     };
     SDL_Rect dst = (SDL_Rect){ 
         x, 
@@ -141,7 +141,7 @@ static int getscreensize(lua_State* L) {
     return 2;
 }
 
-const luaL_Reg draw[] = {
+static const luaL_Reg draw[] = {
     { "setscreensize", setscreensize },
     { "getscreensize", getscreensize },
     { "getpixelperfect", getpixelperfect },

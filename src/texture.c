@@ -231,6 +231,16 @@ static int getangle(lua_State* L) {
 
 static int getquad(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
+    Texture* texture = texture_get_at(manager, texture_index);
+
+    lua_pushnumber(L, texture->quadx);
+    lua_pushnumber(L, texture->quady);
+    lua_pushnumber(L, texture->quadw);
+    lua_pushnumber(L, texture->quadh);
+    return 4;
+}
+static int setquad(lua_State* L) {
+    int texture_index = lua_tonumber(L, 1);
     int x = lua_tonumber(L, 2);
     int y = lua_tonumber(L, 3);
     int w = lua_tonumber(L, 4);
@@ -242,16 +252,6 @@ static int getquad(lua_State* L) {
     texture->quadw = w;
     texture->quadh = h;
     return 0;
-}
-static int setquad(lua_State* L) {
-    int texture_index = lua_tonumber(L, 1);
-    Texture* texture = texture_get_at(manager, texture_index);
-
-    lua_pushnumber(L, texture->quadx);
-    lua_pushnumber(L, texture->quady);
-    lua_pushnumber(L, texture->quadw);
-    lua_pushnumber(L, texture->quadh);
-    return 4;
 }
 
 static int gettexturesize(lua_State* L) {

@@ -7,6 +7,7 @@
 
 typedef struct {
     TTF_Font* sdl_font;
+    int point_size;
 } Font;
 
 void init_font_manager(ItemManager* manager);

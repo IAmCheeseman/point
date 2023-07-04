@@ -158,7 +158,7 @@ static int textlines(lua_State* L) {
     for (int i = 1; i <= length; i++) {
         lua_rawgeti(L, 5, i);
         const char* text = lua_tostring(L, -1);
-        render_text(font, text, x, y + (i - 1) * 12 + spacing * (i - 1));
+        render_text(font, text, x, y + (i - 1) * font->point_size + spacing * (i - 1));
     }
 
     return 0;

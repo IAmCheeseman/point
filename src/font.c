@@ -9,6 +9,7 @@ int create_font(ItemManager* manager, const char *path, int font_size) {
 
     Font* font = (Font*)malloc(sizeof(Font));
     font->sdl_font = TTF_OpenFont(path, font_size);
+    font->point_size = font_size;
 
     if (font->sdl_font == NULL) {
         fprintf(stderr, "Failed to load font '%s'.\n", path);
@@ -21,6 +22,7 @@ int create_font(ItemManager* manager, const char *path, int font_size) {
 void free_font(Font* font) {
     TTF_CloseFont(font->sdl_font);
     font->sdl_font = NULL;
+    free(font);
 }
 
 void free_font_manager(ItemManager* manager) {

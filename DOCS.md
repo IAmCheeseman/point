@@ -32,7 +32,7 @@ Temp docs for y'all
 - `getpos()` - returns the window's position
 - `setsize(w, h)` - sets the window's size
 - `getsize()` - returns the window's size
-- `setfullscreen(ison, mode)` - sets fullscreen to `ison`, valid modes are `"desktop"` or `"fullscreen"`
+- `setfullscreen(ison, mode="desktop")` - sets fullscreen to `ison`, valid modes are `"desktop"` or `"fullscreen"`
 - `getfullscreen()` - returns whether it's fullscreen or not
 
 ## point.texture

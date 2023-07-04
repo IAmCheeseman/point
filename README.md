@@ -28,3 +28,8 @@ end
 ```
 
 Use [this](https://github.com/IAmCheeseman/point/blob/master/point.yml) as documentation.
+
+## TODO
+
+- Make textures, fonts, audio userdata
+- Make the engine userdata and get rid of the globals

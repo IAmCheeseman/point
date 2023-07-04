@@ -167,6 +167,13 @@ globals:
     args:
       - type: string
     must_use: true
+  point.texture.free:
+    args:
+      - type: number
+  point.texture.isvalid:
+    args:
+      - type: number
+    must_use: true
   point.texture.setscale:
     args:
       - type: number

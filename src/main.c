@@ -102,8 +102,6 @@ int main(int argc, char* args[]) {
         strcat(path, "/");
     }
     strcat(path, "main.lua");
-    printf("%s\n", path);
-
 
     int res = luaL_dofile(engine->L, path);
     free(path);

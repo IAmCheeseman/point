@@ -13,6 +13,7 @@ void init_renderer(Renderer* renderer, Window* window) {
 
     renderer->is_rendering = false;
     renderer->is_pixel_perfect = false;
+    renderer->target = NULL;
 
     SDL_GetWindowSize(window->sdl_window, &renderer->screen_width, &renderer->screen_height);
     set_screen_size(renderer, renderer->screen_width, renderer->screen_height);

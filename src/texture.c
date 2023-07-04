@@ -62,6 +62,7 @@ int create_texture(TextureManager* manager, SDL_Renderer* renderer, const char *
 void free_texture(Texture* texture) {
     SDL_DestroyTexture(texture->sdl_texture);
     texture->sdl_texture = NULL;
+    free(texture);
 }
 
 void free_texture_manager(TextureManager* manager) {
@@ -69,6 +70,7 @@ void free_texture_manager(TextureManager* manager) {
         if (manager->textures[i] == NULL)
             continue;
         free_texture(manager->textures[i]);
+        manager->textures[i] = NULL;
     }
 
     manager->texture_capacity = 0;

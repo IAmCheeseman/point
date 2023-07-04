@@ -86,23 +86,9 @@ static void main_loop(EngineState* engine) {
 }
 
 int main(int argc, char* args[]) {
-    if (argc != 2) {
-        fprintf(stderr, "Usage: %s [directory]\n", args[0]);
-        return 1;
-    }
-
     EngineState* engine = create_engine();
 
-    char* path = (char*)malloc(sizeof(char) * 100);
-    strcpy(path, args[1]);
-    if (path[strlen(path) - 1] != '/') {
-        strcat(path, "/");
-    }
-    strcat(path, "main.lua");
-
-    int res = luaL_dofile(engine->L, path);
-    free(path);
-
+    int res = luaL_dofile(engine->L, "main.lua");
     if (res != LUA_OK) {
         fprintf(stderr, "[LUA]:\n%s\n", lua_tostring(engine->L, -1));
         return 1;

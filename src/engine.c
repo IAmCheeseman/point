@@ -62,7 +62,7 @@ EngineState *create_engine() {
 
     luaL_dostring(engine->L, // Defining empty callbacks so lua doesn't get angry at me because they're nil
     "function point.onload() end\n"
-    "function point.onstep(_) end\n"
+    "function point.onstep() end\n"
     "function point.ondraw() end\n"
     "function point.onkeydown(_, _) end\n"
     "function point.onkeyup(_) end\n");

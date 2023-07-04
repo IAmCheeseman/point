@@ -2,7 +2,7 @@
 #include "draw.h"
 
 Renderer* renderer = NULL;
-TextureManager* texture_manager = NULL;
+ItemManager* texture_manager = NULL;
 
 static int rect(lua_State* L) {
     int x = lua_tonumber(L, 1);

@@ -2,6 +2,7 @@
 #define _point_engine_h
 
 #include "common.h"
+#include "manager.h"
 #include "renderer.h"
 #include "window.h"
 #include "events.h"
@@ -11,7 +12,7 @@ typedef struct {
     Window window;
     Renderer renderer;
     EventHandler event_handler;
-    TextureManager texture_manager;
+    ItemManager texture_manager;
     lua_State* L;
     int traceback_location;
     double now;

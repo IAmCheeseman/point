@@ -1,21 +1,15 @@
 #include "texture.h"
 
-void init_texture_manager(TextureManager* manager) {
-    manager->texture_capacity = 8;
-    manager->texture_count = 0;
-    manager->textures = (Texture**)malloc(sizeof(Texture*) * manager->texture_capacity);
-    for (int i = manager->texture_count; i < manager->texture_capacity; i++)
-        manager->textures[i] = NULL;
+void init_texture_manager(ItemManager* manager) {
+    manager->capacity = 8;
+    manager->count = 0;
+    manager->items = malloc(sizeof(Texture*) * manager->capacity);
+    for (int i = manager->count; i < manager->capacity; i++)
+        manager->items[i] = NULL;
 }
 
-int create_texture(TextureManager* manager, SDL_Renderer* renderer, const char *path) {
-    if (manager->texture_count + 1 > manager->texture_capacity) {
-        manager->texture_capacity *= 1.5;
-        manager->textures = (Texture**)realloc(manager->textures, sizeof(Texture*) * manager->texture_capacity);
-
-        for (int i = manager->texture_count; i < manager->texture_capacity; i++)
-            manager->textures[i] = NULL;
-    }
+int create_texture(ItemManager* manager, SDL_Renderer* renderer, const char *path) {
+    ITEM_MANAGER_RESIZE(manager, Texture);
 
     // Loading the image
     SDL_Surface* surf = IMG_Load(path);
@@ -49,14 +43,7 @@ int create_texture(TextureManager* manager, SDL_Renderer* renderer, const char *
     texture->fliph = false;
     texture->flipv = false;
 
-    for (int i = 0; i < manager->texture_count + 1; i++) {
-        if (manager->textures[i] == NULL) {
-            manager->textures[i] = texture;
-            return i;
-        }
-    }
-
-    return -1;
+    return item_manager_set(manager, texture);
 }
 
 void free_texture(Texture* texture) {
@@ -65,34 +52,15 @@ void free_texture(Texture* texture) {
     free(texture);
 }
 
-void free_texture_manager(TextureManager* manager) {
-    for (int i = 0; i < manager->texture_capacity; i++) {
-        if (manager->textures[i] == NULL)
-            continue;
-        free_texture(manager->textures[i]);
-        manager->textures[i] = NULL;
-    }
-
-    manager->texture_capacity = 0;
-    manager->texture_count = 0;
-    free(manager->textures);
-
-    manager->textures = NULL;
+void free_texture_manager(ItemManager* manager) {
+    ITEM_MANAGER_FREE(free_texture, Texture);
 }
 
-Texture* texture_get_at(TextureManager* manager, int index) {
-    if (index < 0 || index > manager->texture_count || manager->textures[index] == NULL) {
-        fprintf(stderr, "Invalid texture index '%d'.\n", index);
-        exit(1);
-    }
-    return manager->textures[index];
+Texture* texture_get_at(ItemManager* manager, int index) {
+    return (Texture*)item_manager_get(manager, index, "texture");
 }
 
-bool texture_index_is_valid(TextureManager* manager, int index) {
-    return index >= 0 && index <= manager->texture_count && manager->textures[index] != NULL;
-}
-
-TextureManager* manager;
+ItemManager* manager;
 SDL_Renderer* sdl_renderer;
 
 static int load(lua_State* L) {
@@ -109,7 +77,7 @@ static int load(lua_State* L) {
 
 static int isvalid(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
-    lua_pushboolean(L, texture_index_is_valid(manager, texture_index));
+    lua_pushboolean(L, item_manager_index_is_valid(manager, texture_index));
     return 1;
 }
 
@@ -117,7 +85,7 @@ static int free_lua_texture(lua_State* L) {
     int texture_index = lua_tonumber(L, 1);
     Texture* texture = texture_get_at(manager, texture_index);
     free_texture(texture);
-    manager->textures[texture_index] = NULL;
+    manager->items[texture_index] = NULL;
 
     return 0;
 }
@@ -363,7 +331,7 @@ static const luaL_Reg texture_lib[] = {
     { NULL, NULL },
 };
 
-void init_texture_lib(lua_State *L, TextureManager* texture_manager, SDL_Renderer* renderer) {
+void init_texture_lib(lua_State *L, ItemManager* texture_manager, SDL_Renderer* renderer) {
     manager = texture_manager;
     sdl_renderer = renderer;
 

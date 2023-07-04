@@ -4,6 +4,7 @@
 #include "vector.h"
 #include "timing.h"
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 
 static int traceback(lua_State *L)
 {
@@ -29,6 +30,10 @@ EngineState *create_engine() {
     }
     if (IMG_Init(IMG_INIT_PNG) < 0) {
         fprintf(stderr, "Failed to init img: %s\n", IMG_GetError());
+        exit(1);
+    }
+    if (TTF_Init() < 0) {
+        fprintf(stderr, "Failed to init ttf: %s\n", TTF_GetError());
         exit(1);
     }
 
@@ -107,5 +112,7 @@ void free_engine(EngineState* engine) {
 
     engine->L = NULL;
 
+    IMG_Quit();
+    TTF_Quit();
     SDL_Quit();
 }

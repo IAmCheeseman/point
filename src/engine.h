@@ -14,10 +14,14 @@ typedef struct {
     TextureManager texture_manager;
     lua_State* L;
     int traceback_location;
+    double now;
+    double prev;
+    double total_time;
 } EngineState;
 
 EngineState* create_engine();
 double get_screen_scale(EngineState* engine);
+double calculate_delta_time(EngineState* engine);
 void free_engine(EngineState* engine);
 
 #endif

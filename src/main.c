@@ -20,14 +20,13 @@ static void process_events(EngineState* engine) {
     }
 }
 
-static void process(EngineState* engine, double delta) {
+static void process(EngineState* engine) {
     lua_getglobal(engine->L, "point");
     luaL_checktype(engine->L, -1, LUA_TTABLE);
 
     lua_getfield(engine->L, -1, "onstep");
     luaL_checktype(engine->L, -1, LUA_TFUNCTION);
-    lua_pushnumber(engine->L, delta);
-    call_lua_func(engine->L, engine->traceback_location, 1, 0);
+    call_lua_func(engine->L, engine->traceback_location, 0, 0);
 
     lua_pop(engine->L, 1); // Table
 }
@@ -57,8 +56,6 @@ static void draw(EngineState* engine, int x, int y, int w, int h) {
 }
 
 static void main_loop(EngineState* engine) {
-    double now = SDL_GetPerformanceCounter();
-    double prev = 0;
     while (!engine->window.should_close) {
         process_events(engine);
         
@@ -78,12 +75,12 @@ static void main_loop(EngineState* engine) {
         engine->event_handler.mouse_x = (mx - x) / scale;
         engine->event_handler.mouse_y = (my - y) / scale;
 
-        // Why is dt always SO cringe to calculate!
-        prev = now;
-        now = SDL_GetPerformanceCounter();
-        double delta = ((double)((now - prev) * 1000 / (double)SDL_GetPerformanceFrequency()) * 0.001);
+        engine->prev = engine->now;
+        engine->now = SDL_GetPerformanceCounter();
+        engine->total_time += calculate_delta_time(engine);
 
-        process(engine, delta);
+        process(engine);
+
         draw(engine, x, y, w, h);
     }
 }

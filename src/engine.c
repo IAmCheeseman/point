@@ -2,6 +2,7 @@
 #include "draw.h"
 #include "window.h"
 #include "vector.h"
+#include "timing.h"
 #include <SDL2/SDL_image.h>
 
 static int traceback(lua_State *L)
@@ -31,6 +32,10 @@ EngineState *create_engine() {
         exit(1);
     }
 
+    engine->now = SDL_GetPerformanceCounter();
+    engine->prev = 0;
+    engine->total_time = 0;
+
     init_window(&engine->window);
     init_renderer(&engine->renderer, &engine->window);
     init_event_handler(&engine->event_handler);
@@ -51,6 +56,7 @@ EngineState *create_engine() {
     init_event_libs(engine->L, &engine->event_handler);
     init_vector_lib(engine->L);
     init_texture_lib(engine->L, &engine->texture_manager, engine->renderer.sdl_renderer);
+    init_time_lib(engine);
 
     lua_setglobal(engine->L, "point");
 
@@ -89,6 +95,10 @@ double get_screen_scale(EngineState* engine) {
         ? (double)w / (double)sw
         : (double)h / (double)sh;
 
+}
+
+double calculate_delta_time(EngineState* engine) {
+    return ((double)((engine->now - engine->prev) * 1000 / (double)SDL_GetPerformanceFrequency()) * 0.001);
 }
 
 void free_engine(EngineState* engine) {

@@ -81,6 +81,52 @@ globals:
       - type: number
       - type: number
     must_use: true
+  point.vector.dot:
+    args:
+      - type: number
+      - type: number
+      - type: number
+      - type: number
+    must_use: true
+  point.vector.directionto:
+    args:
+      - type: number
+      - type: number
+      - type: number
+      - type: number
+    must_use: true
+  point.vector.distanceto:
+    args:
+      - type: number
+      - type: number
+      - type: number
+      - type: number
+    must_use: true
+  point.vector.manhattandistanceto:
+    args:
+      - type: number
+      - type: number
+      - type: number
+      - type: number
+    must_use: true
+  point.vector.angle:
+    args:
+      - type: number
+      - type: number
+    must_use: true
+  point.vector.angleto:
+    args:
+      - type: number
+      - type: number
+      - type: number
+      - type: number
+    must_use: true
+  point.vector.rotated:
+    args:
+      - type: number
+      - type: number
+      - type: number
+    must_use: true
 
   point.window.exit:
     args: []

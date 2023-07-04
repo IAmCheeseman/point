@@ -26,3 +26,5 @@ function point.ondraw()
     point.draw.texture(texture, x, y)
 end
 ```
+
+Use [this](https://github.com/IAmCheeseman/point/blob/master/point.yml) as documentation.

@@ -10,10 +10,10 @@ globals:
     property: read-only
     any: true
 
-  point.time.timerunning:
+  point.time.runtime:
     args: []
     must_use: true
-  point.time.deltatime:
+  point.time.delta:
     args: []
     must_use: true
 

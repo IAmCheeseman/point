@@ -2,19 +2,19 @@
 
 EngineState* engine;
 
-static int timerunning(lua_State* L) {
+static int runtime(lua_State* L) {
     lua_pushnumber(L, engine->total_time);
     return 1;
 }
 
-static int deltatime(lua_State* L) {
+static int delta(lua_State* L) {
     lua_pushnumber(L, calculate_delta_time(engine));
     return 1;
 }
 
 static const luaL_Reg timing[] = {
-    { "timerunning", timerunning },
-    { "deltatime", deltatime },
+    { "runtime", runtime },
+    { "delta", delta },
     { NULL, NULL },
 };
 

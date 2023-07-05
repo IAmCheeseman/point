@@ -6,9 +6,12 @@ bool call_lua_table_func(lua_State* L, int traceback_location, const char* table
     luaL_checktype(L, -1, LUA_TTABLE);
 
     lua_getfield(L, -1, name);
-    luaL_checktype(L, -1, LUA_TFUNCTION);
-    
-    bool res = call_lua_func(L, traceback_location, 0, return_count);
+    bool res = false;
+    if (lua_type(L, -1) == LUA_TFUNCTION) {
+        res = call_lua_func(L, traceback_location, 0, return_count);
+    } else {
+        lua_pop(L, 1);
+    }
 
     lua_pop(L, 1); // Table
 

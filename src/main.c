@@ -24,9 +24,7 @@ static void process(EngineState* engine) {
     lua_getglobal(engine->L, "point");
     luaL_checktype(engine->L, -1, LUA_TTABLE);
 
-    lua_getfield(engine->L, -1, "onstep");
-    luaL_checktype(engine->L, -1, LUA_TFUNCTION);
-    call_lua_func(engine->L, engine->traceback_location, 0, 0);
+    call_lua_table_func(engine->L, engine->traceback_location, "point", "onstep", 0);
 
     lua_pop(engine->L, 1); // Table
 }

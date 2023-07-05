@@ -146,6 +146,8 @@ static const luaL_Reg vector[] = {
 };
 
 void init_vector_lib(lua_State* L) {
+    lua_getglobal(L, "point");
     luaL_newlib(L, vector);
     lua_setfield(L, -2, "vector");
+    lua_pop(L, 1);
 }

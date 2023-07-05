@@ -215,7 +215,8 @@ void init_draw_lib(lua_State *L, EngineState* engine) {
     renderer = &engine->renderer;
     font_manager = &engine->font_manager;
 
-    // lua_getglobal(L, "point");
+    lua_getglobal(L, "point");
     luaL_newlib(L, draw);
     lua_setfield(L, -2, "draw");
+    lua_pop(L, 1);
 }

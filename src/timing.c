@@ -21,6 +21,8 @@ static const luaL_Reg timing[] = {
 void init_time_lib(EngineState* state) {
     engine = state;
 
+    lua_getglobal(engine->L, "point");
     luaL_newlib(engine->L, timing);
     lua_setfield(engine->L, -2, "time");
+    lua_pop(engine->L, 1);
 }

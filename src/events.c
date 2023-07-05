@@ -150,7 +150,7 @@ static const luaL_Reg input[] = {
 void init_event_libs(lua_State *L, EventHandler* event_handler) {
     handler = event_handler;
 
-    // lua_getglobal(L, "point");
+    lua_getglobal(L, "point");
     luaL_newlib(L, input);
     lua_setfield(L, -2, "input");
 
@@ -175,4 +175,6 @@ void init_event_libs(lua_State *L, EventHandler* event_handler) {
         lua_setfield(L, -2, mouse_button_names[i]);
     }
     lua_setfield(L, -2, "mouse");
+
+    lua_pop(L, 1);
 }

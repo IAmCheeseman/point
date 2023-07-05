@@ -56,6 +56,8 @@ static const luaL_Reg font_lib[] = {
 void init_font_lib(lua_State *L, ItemManager* font_manager) {
     manager = font_manager;
 
+    lua_getglobal(L, "point");
     luaL_newlib(L, font_lib);
     lua_setfield(L, -2, "font");
+    lua_pop(L, 1);
 }

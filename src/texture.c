@@ -259,6 +259,8 @@ static const luaL_Reg texture_lib[] = {
 void init_texture_lib(lua_State *L, SDL_Renderer* renderer) {
     sdl_renderer = renderer;
 
+    lua_getglobal(L, "point");
     luaL_newlib(L, texture_lib);
     lua_setfield(L, -2, "texture");
+    lua_pop(L, 1);
 }

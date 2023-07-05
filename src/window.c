@@ -130,7 +130,8 @@ static const luaL_Reg window_lib[] = {
 void init_window_lib(lua_State* L, Window* engine_window) {
     window = engine_window;
 
-    // lua_getglobal(L, "point");
+    lua_getglobal(L, "point");
     luaL_newlib(L, window_lib);
     lua_setfield(L, -2, "window");
+    lua_pop(L, 1);
 }

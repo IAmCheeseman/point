@@ -55,6 +55,7 @@ EngineState *create_engine() {
 
     // Init libs
     lua_newtable(engine->L);
+    lua_setglobal(engine->L, "point");
     
     init_draw_lib(engine->L, engine);
     init_window_lib(engine->L, &engine->window);
@@ -64,7 +65,6 @@ EngineState *create_engine() {
     init_font_lib(engine->L, &engine->font_manager);
     init_time_lib(engine);
 
-    lua_setglobal(engine->L, "point");
 
     luaL_dostring(engine->L, // Defining empty callbacks so lua doesn't get angry at me because they're nil
     "function point.onload() end\n"

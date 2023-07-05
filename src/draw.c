@@ -74,7 +74,7 @@ static int line(lua_State* L) {
 }
 
 static int texture(lua_State* L) {
-    Texture* texture = (Texture*)lua_touserdata(L, 1);
+    Texture* texture = (Texture*)luaL_checkudata(L, 1, TEXTURE_NAME);
     int x = lua_tonumber(L, 2);
     int y = lua_tonumber(L, 3);
 

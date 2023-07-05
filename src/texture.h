@@ -4,6 +4,8 @@
 #include "common.h"
 #include <SDL2/SDL_image.h>
 
+#define TEXTURE_NAME "Texture"
+
 typedef struct {
     SDL_Texture* sdl_texture;
     double angle;

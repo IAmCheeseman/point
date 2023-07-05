@@ -2,7 +2,6 @@
 #define _point_texture_h
 
 #include "common.h"
-#include "manager.h"
 #include <SDL2/SDL_image.h>
 
 typedef struct {
@@ -20,18 +19,6 @@ typedef struct {
     bool flipv;
 } Texture;
 
-// typedef struct {
-//     int texture_capacity;
-//     int texture_count;
-//     Texture** textures;
-// } TextureManager;
-
-void init_texture_manager(ItemManager* manager);
-int create_texture(ItemManager* manager, SDL_Renderer* renderer, const char *path);
-void free_texture(Texture* texture);
-void free_texture_manager(ItemManager* manager);
-Texture* texture_get_at(ItemManager* manager, int index);
-
-void init_texture_lib(lua_State *L, ItemManager* texture_manager, SDL_Renderer* sdl_renderer);
+void init_texture_lib(lua_State *L, SDL_Renderer* sdl_renderer);
 
 #endif

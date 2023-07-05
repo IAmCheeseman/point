@@ -44,7 +44,6 @@ EngineState *create_engine() {
     init_window(&engine->window);
     init_renderer(&engine->renderer, &engine->window);
     init_event_handler(&engine->event_handler);
-    init_texture_manager(&engine->texture_manager);
     init_font_manager(&engine->font_manager);
 
     // Init lua
@@ -61,7 +60,7 @@ EngineState *create_engine() {
     init_window_lib(engine->L, &engine->window);
     init_event_libs(engine->L, &engine->event_handler);
     init_vector_lib(engine->L);
-    init_texture_lib(engine->L, &engine->texture_manager, engine->renderer.sdl_renderer);
+    init_texture_lib(engine->L, engine->renderer.sdl_renderer);
     init_font_lib(engine->L, &engine->font_manager);
     init_time_lib(engine);
 
@@ -115,7 +114,6 @@ void free_engine(EngineState* engine) {
     lua_close(engine->L);
     free_window(&engine->window);
     free_renderer(&engine->renderer);
-    free_texture_manager(&engine->texture_manager);
 
     engine->L = NULL;
 

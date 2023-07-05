@@ -2,7 +2,6 @@
 #include "draw.h"
 
 static Renderer* renderer = NULL;
-static ItemManager* texture_manager = NULL;
 static ItemManager* font_manager = NULL;
 
 static int rect(lua_State* L) {
@@ -75,11 +74,9 @@ static int line(lua_State* L) {
 }
 
 static int texture(lua_State* L) {
-    int texture_index = lua_tonumber(L, 1);
+    Texture* texture = (Texture*)lua_touserdata(L, 1);
     int x = lua_tonumber(L, 2);
     int y = lua_tonumber(L, 3);
-
-    Texture* texture = texture_get_at(texture_manager, texture_index);
 
     int w, h;
     SDL_QueryTexture(texture->sdl_texture, NULL, NULL, &w, &h);
@@ -216,7 +213,6 @@ static const luaL_Reg draw[] = {
 
 void init_draw_lib(lua_State *L, EngineState* engine) {
     renderer = &engine->renderer;
-    texture_manager = &engine->texture_manager;
     font_manager = &engine->font_manager;
 
     // lua_getglobal(L, "point");

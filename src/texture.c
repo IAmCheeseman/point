@@ -1,11 +1,9 @@
 #include "texture.h"
 
-void init_texture_manager(ItemManager* manager) {
-    ITEM_MANAGER_INITIALIZE(manager, Texture);
-}
+static SDL_Renderer* sdl_renderer;
 
-int create_texture(ItemManager* manager, SDL_Renderer* renderer, const char *path) {
-    ITEM_MANAGER_RESIZE(manager, Texture);
+static int load(lua_State* L) {
+    const char* path = lua_tostring(L, 1);
 
     // Loading the image
     SDL_Surface* surf = IMG_Load(path);
@@ -13,7 +11,7 @@ int create_texture(ItemManager* manager, SDL_Renderer* renderer, const char *pat
         fprintf(stderr, "Failed to load image: %s\n", IMG_GetError());
         exit(1);
     }
-    SDL_Texture* sdl_texture = SDL_CreateTextureFromSurface(renderer, surf);
+    SDL_Texture* sdl_texture = SDL_CreateTextureFromSurface(sdl_renderer, surf);
     if (sdl_texture == NULL) {
         fprintf(stderr, "Failed to load image: %s\n", SDL_GetError());
         exit(1);
@@ -25,7 +23,7 @@ int create_texture(ItemManager* manager, SDL_Renderer* renderer, const char *pat
     SDL_QueryTexture(sdl_texture, NULL, NULL, &w, &h);
 
     // Creating the texture
-    Texture* texture = (Texture*)malloc(sizeof(Texture));
+    Texture* texture = (Texture*)lua_newuserdata(L, sizeof(Texture));
     texture->sdl_texture = sdl_texture;
     texture->angle = 0;
     texture->scalex = 1;
@@ -39,202 +37,139 @@ int create_texture(ItemManager* manager, SDL_Renderer* renderer, const char *pat
     texture->fliph = false;
     texture->flipv = false;
 
-    return item_manager_set(manager, texture);
-}
-
-void free_texture(Texture* texture) {
-    SDL_DestroyTexture(texture->sdl_texture);
-    texture->sdl_texture = NULL;
-    free(texture);
-}
-
-void free_texture_manager(ItemManager* manager) {
-    ITEM_MANAGER_FREE(free_texture, Texture);
-}
-
-Texture* texture_get_at(ItemManager* manager, int index) {
-    return (Texture*)item_manager_get(manager, index, "texture");
-}
-
-static ItemManager* manager;
-static SDL_Renderer* sdl_renderer;
-
-static int load(lua_State* L) {
-    const char* path = lua_tostring(L, 1);
-    int index = create_texture(manager, sdl_renderer, path);
-    if (index == -1) {
-        fprintf(stderr, "Invalid texture index '-1'.\n");
-        exit(1);
-    }
-    lua_pushnumber(L, index);
-
     return 1;
-}
-
-static int isvalid(lua_State* L) {
-    int texture_index = lua_tonumber(L, 1);
-    lua_pushboolean(L, item_manager_index_is_valid(manager, texture_index));
-    return 1;
-}
-
-static int free_lua_texture(lua_State* L) {
-    int texture_index = lua_tonumber(L, 1);
-    Texture* texture = texture_get_at(manager, texture_index);
-    free_texture(texture);
-    manager->items[texture_index] = NULL;
-
-    return 0;
 }
 
 static int setscale(lua_State* L) {
-    int texture_index = lua_tonumber(L, 1);
+    Texture* texture = (Texture*)lua_touserdata(L, 1);
     double x = lua_tonumber(L, 2);
     double y = lua_tonumber(L, 3);
-    Texture* texture = texture_get_at(manager, texture_index);
 
     texture->scalex = x;
     texture->scaley = y;
     return 0;
 }
 static int setscalex(lua_State* L) {
-    int texture_index = lua_tonumber(L, 1);
+    Texture* texture = (Texture*)lua_touserdata(L, 1);
     double x = lua_tonumber(L, 2);
-    Texture* texture = texture_get_at(manager, texture_index);
 
     texture->scalex = x;
     return 0;
 }
 static int setscaley(lua_State* L) {
-    int texture_index = lua_tonumber(L, 1);
+    Texture* texture = (Texture*)lua_touserdata(L, 1);
     double y = lua_tonumber(L, 2);
-    Texture* texture = texture_get_at(manager, texture_index);
 
     texture->scaley = y;
     return 0;
 }
 static int getscale(lua_State* L) {
-    int texture_index = lua_tonumber(L, 1);
-    Texture* texture = texture_get_at(manager, texture_index);
+    Texture* texture = (Texture*)lua_touserdata(L, 1);
 
     lua_pushnumber(L, texture->scalex);
     lua_pushnumber(L, texture->scaley);
     return 2;
 }
 static int getscalex(lua_State* L) {
-    int texture_index = lua_tonumber(L, 1);
-    Texture* texture = texture_get_at(manager, texture_index);
+    Texture* texture = (Texture*)lua_touserdata(L, 1);
 
     lua_pushnumber(L, texture->scalex);
     return 1;
 }
 static int getscaley(lua_State* L) {
-    int texture_index = lua_tonumber(L, 1);
-    Texture* texture = texture_get_at(manager, texture_index);
+    Texture* texture = (Texture*)lua_touserdata(L, 1);
 
     lua_pushnumber(L, texture->scaley);
     return 1;
 }
 
 static int setpivot(lua_State* L) {
-    int texture_index = lua_tonumber(L, 1);
+    Texture* texture = (Texture*)lua_touserdata(L, 1);
     double x = lua_tonumber(L, 2);
     double y = lua_tonumber(L, 3);
-    Texture* texture = texture_get_at(manager, texture_index);
 
     texture->pivotx = x;
     texture->pivoty = y;
     return 0;
 }
 static int setpivotx(lua_State* L) {
-    int texture_index = lua_tonumber(L, 1);
+    Texture* texture = (Texture*)lua_touserdata(L, 1);
     double x = lua_tonumber(L, 2);
-    Texture* texture = texture_get_at(manager, texture_index);
 
     texture->pivotx = x;
     return 0;
 }
 static int setpivoty(lua_State* L) {
-    int texture_index = lua_tonumber(L, 1);
+    Texture* texture = (Texture*)lua_touserdata(L, 1);
     double y = lua_tonumber(L, 2);
-    Texture* texture = texture_get_at(manager, texture_index);
 
     texture->pivoty = y;
     return 0;
 }
 static int getpivot(lua_State* L) {
-    int texture_index = lua_tonumber(L, 1);
-    Texture* texture = texture_get_at(manager, texture_index);
+    Texture* texture = (Texture*)lua_touserdata(L, 1);
 
     lua_pushnumber(L, texture->pivotx);
     lua_pushnumber(L, texture->pivoty);
     return 2;
 }
 static int getpivotx(lua_State* L) {
-    int texture_index = lua_tonumber(L, 1);
-    Texture* texture = texture_get_at(manager, texture_index);
+    Texture* texture = (Texture*)lua_touserdata(L, 1);
 
     lua_pushnumber(L, texture->pivotx);
     return 1;
 }
 static int getpivoty(lua_State* L) {
-    int texture_index = lua_tonumber(L, 1);
-    Texture* texture = texture_get_at(manager, texture_index);
+    Texture* texture = (Texture*)lua_touserdata(L, 1);
 
     lua_pushnumber(L, texture->pivoty);
     return 1;
 }
 
 static int setfliph(lua_State* L) {
-    int texture_index = lua_tonumber(L, 1);
+    Texture* texture = (Texture*)lua_touserdata(L, 1);
     bool flipped = lua_toboolean(L, 2);
-    Texture* texture = texture_get_at(manager, texture_index);
 
     texture->fliph = flipped;
     return 0;
 }
 static int getfliph(lua_State* L) {
-    int texture_index = lua_tonumber(L, 1);
-    Texture* texture = texture_get_at(manager, texture_index);
+    Texture* texture = (Texture*)lua_touserdata(L, 1);
 
     lua_pushboolean(L, texture->fliph);
     return 1;
 }
 
 static int setflipv(lua_State* L) {
-    int texture_index = lua_tonumber(L, 1);
+    Texture* texture = (Texture*)lua_touserdata(L, 1);
     bool flipped = lua_toboolean(L, 2);
-    Texture* texture = texture_get_at(manager, texture_index);
 
     texture->flipv = flipped;
     return 0;
 }
 static int getflipv(lua_State* L) {
-    int texture_index = lua_tonumber(L, 1);
-    Texture* texture = texture_get_at(manager, texture_index);
+    Texture* texture = (Texture*)lua_touserdata(L, 1);
 
     lua_pushboolean(L, texture->flipv);
     return 1;
 }
 
 static int setangle(lua_State* L) {
-    int texture_index = lua_tonumber(L, 1);
+    Texture* texture = (Texture*)lua_touserdata(L, 1);
     double angle = lua_tonumber(L, 2);
-    Texture* texture = texture_get_at(manager, texture_index);
 
     texture->angle = angle;
     return 0;
 }
 static int getangle(lua_State* L) {
-    int texture_index = lua_tonumber(L, 1);
-    Texture* texture = texture_get_at(manager, texture_index);
+    Texture* texture = (Texture*)lua_touserdata(L, 1);
 
     lua_pushnumber(L, texture->angle);
     return 1;
 }
 
 static int getquad(lua_State* L) {
-    int texture_index = lua_tonumber(L, 1);
-    Texture* texture = texture_get_at(manager, texture_index);
+    Texture* texture = (Texture*)lua_touserdata(L, 1);
 
     lua_pushnumber(L, texture->quadx);
     lua_pushnumber(L, texture->quady);
@@ -243,12 +178,11 @@ static int getquad(lua_State* L) {
     return 4;
 }
 static int setquad(lua_State* L) {
-    int texture_index = lua_tonumber(L, 1);
+    Texture* texture = (Texture*)lua_touserdata(L, 1);
     int x = lua_tonumber(L, 2);
     int y = lua_tonumber(L, 3);
     int w = lua_tonumber(L, 4);
     int h = lua_tonumber(L, 5);
-    Texture* texture = texture_get_at(manager, texture_index);
 
     texture->quadx = x;
     texture->quady = y;
@@ -258,8 +192,7 @@ static int setquad(lua_State* L) {
 }
 
 static int gettexturesize(lua_State* L) {
-    int texture_index = lua_tonumber(L, 1);
-    Texture* texture = texture_get_at(manager, texture_index);
+    Texture* texture = (Texture*)lua_touserdata(L, 1);
 
     int w, h;
     SDL_QueryTexture(texture->sdl_texture, NULL, NULL, &w, &h);
@@ -270,8 +203,7 @@ static int gettexturesize(lua_State* L) {
 }
 
 static int getwidth(lua_State* L) {
-    int texture_index = lua_tonumber(L, 1);
-    Texture* texture = texture_get_at(manager, texture_index);
+    Texture* texture = (Texture*)lua_touserdata(L, 1);
 
     int w;
     SDL_QueryTexture(texture->sdl_texture, NULL, NULL, &w, NULL);
@@ -280,8 +212,7 @@ static int getwidth(lua_State* L) {
     return 1;
 }
 static int getheight(lua_State* L) {
-    int texture_index = lua_tonumber(L, 1);
-    Texture* texture = texture_get_at(manager, texture_index);
+    Texture* texture = (Texture*)lua_touserdata(L, 1);
 
     int h;
     SDL_QueryTexture(texture->sdl_texture, NULL, NULL, NULL, &h);
@@ -292,8 +223,6 @@ static int getheight(lua_State* L) {
 
 static const luaL_Reg texture_lib[] = {
     { "load", load },
-    { "free", free_lua_texture },
-    { "isvalid", isvalid },
 
     { "setscale",   setscale },
     { "getscale",   getscale },
@@ -327,8 +256,7 @@ static const luaL_Reg texture_lib[] = {
     { NULL, NULL },
 };
 
-void init_texture_lib(lua_State *L, ItemManager* texture_manager, SDL_Renderer* renderer) {
-    manager = texture_manager;
+void init_texture_lib(lua_State *L, SDL_Renderer* renderer) {
     sdl_renderer = renderer;
 
     luaL_newlib(L, texture_lib);

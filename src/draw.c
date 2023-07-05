@@ -2,7 +2,6 @@
 #include "draw.h"
 
 static Renderer* renderer = NULL;
-static ItemManager* font_manager = NULL;
 
 static int rect(lua_State* L) {
     int x = lua_tonumber(L, 1);
@@ -119,6 +118,8 @@ void render_text(Font* font, const char* text, int x, int y) {
         exit(1);
     }
 
+    SDL_FreeSurface(text_surface);
+
     int w, h;
     SDL_QueryTexture(text_texture, NULL, NULL, &w, &h);
 
@@ -126,16 +127,13 @@ void render_text(Font* font, const char* text, int x, int y) {
     SDL_RenderCopy(renderer->sdl_renderer, text_texture, NULL, &dst);
 
     SDL_DestroyTexture(text_texture);
-    SDL_FreeSurface(text_surface);
 }
 
 static int text(lua_State* L) {
-    int font_index = lua_tonumber(L, 1);
+    Font* font = (Font*)luaL_checkudata(L, 1, FONT_NAME);
     const char* text = lua_tostring(L, 2);
     int x = lua_tonumber(L, 3);
     int y = lua_tonumber(L, 4);
-
-    Font* font = font_get_at(font_manager, font_index);
 
     render_text(font, text, x, y);
 
@@ -143,12 +141,10 @@ static int text(lua_State* L) {
 }
 
 static int textlines(lua_State* L) {
-    int font_index = lua_tonumber(L, 1);
+    Font* font = (Font*)luaL_checkudata(L, 1, FONT_NAME);
     int x = lua_tonumber(L, 2);
     int y = lua_tonumber(L, 3);
     int spacing = lua_tonumber(L, 4);
-
-    Font* font = font_get_at(font_manager, font_index);
     
     int length = lua_rawlen(L, 5);
 
@@ -213,7 +209,6 @@ static const luaL_Reg draw[] = {
 
 void init_draw_lib(lua_State *L, EngineState* engine) {
     renderer = &engine->renderer;
-    font_manager = &engine->font_manager;
 
     lua_getglobal(L, "point");
     luaL_newlib(L, draw);

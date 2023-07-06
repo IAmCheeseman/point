@@ -1,5 +1,7 @@
 #include <math.h>
 #include "draw.h"
+#include "texture.h"
+#include "font.h"
 
 static Renderer* renderer = NULL;
 
@@ -31,6 +33,94 @@ static int fillrect(lua_State* L) {
         fprintf(stderr, "Failed to render filled rect: %s\n", SDL_GetError());
         exit(1);
     }
+
+    return 0;
+}
+
+static int circle(lua_State* L) {
+    int x = lua_tonumber(L, 1);
+    int y = lua_tonumber(L, 2);
+    int radius = lua_tonumber(L, 3);
+
+    int dx = radius;
+    int dy = 0;
+    int p = 1 - radius;
+
+    if (radius < 0) {
+        SDL_RenderDrawPoint(renderer->sdl_renderer,  dx + x, -dy + y); // Right
+        SDL_RenderDrawPoint(renderer->sdl_renderer, -dx + x, -dy + y); // Left
+        SDL_RenderDrawPoint(renderer->sdl_renderer,  dy + x,  dx + y); // Down
+        SDL_RenderDrawPoint(renderer->sdl_renderer, -dy + x, -dx + y); // Up
+    }
+
+    while (dx > dy) {
+        dy++;
+
+        if (p <= 0) {
+            p += 2 * dy + 1;
+        } else {
+            dx--;
+            p += 2*dy - 2*dx + 1;
+        }
+
+        if (dx < dy) break;
+
+        SDL_RenderDrawPoint(renderer->sdl_renderer,  dx + x,  dy + y);
+        SDL_RenderDrawPoint(renderer->sdl_renderer, -dx + x,  dy + y);
+        SDL_RenderDrawPoint(renderer->sdl_renderer,  dx + x, -dy + y);
+        SDL_RenderDrawPoint(renderer->sdl_renderer, -dx + x, -dy + y);
+
+        if (dx == dy) continue;
+
+        SDL_RenderDrawPoint(renderer->sdl_renderer, -dy + x,  dx + y);
+        SDL_RenderDrawPoint(renderer->sdl_renderer,  dy + x,  dx + y);
+        SDL_RenderDrawPoint(renderer->sdl_renderer,  dy + x, -dx + y);
+        SDL_RenderDrawPoint(renderer->sdl_renderer, -dy + x, -dx + y);
+    }
+
+    SDL_RenderDrawPoint(renderer->sdl_renderer, -radius + x, y);
+    SDL_RenderDrawPoint(renderer->sdl_renderer,  radius + x, y);
+    SDL_RenderDrawPoint(renderer->sdl_renderer, x, -radius + y);
+    SDL_RenderDrawPoint(renderer->sdl_renderer, x,  radius + y);
+
+    return 0;
+}
+
+static int fillcircle(lua_State* L) {
+    int x = lua_tonumber(L, 1);
+    int y = lua_tonumber(L, 2);
+    int radius = lua_tonumber(L, 3);
+
+    int dx = radius;
+    int dy = 0;
+    int p = 1 - radius;
+
+    if (radius < 0) {
+        SDL_RenderDrawLine(renderer->sdl_renderer, dx + x, -dy + y, -dx + x, -dy + y);
+    }
+
+    while (dx > dy) {
+        dy++;
+
+        if (p <= 0) {
+            p += 2 * dy + 1;
+        } else {
+            dx--;
+            p += 2*dy - 2*dx + 1;
+        }
+
+        if (dx < dy) break;
+
+        SDL_RenderDrawLine(renderer->sdl_renderer, -dx + x,  dy + y,  dx + x,  dy + y);
+        SDL_RenderDrawLine(renderer->sdl_renderer,  dx + x, -dy + y, -dx + x, -dy + y);
+
+        if (dx == dy) continue;
+
+        SDL_RenderDrawLine(renderer->sdl_renderer, -dy + x,  dx + y,  dy + x,  dx + y);
+        SDL_RenderDrawLine(renderer->sdl_renderer,  dy + x, -dx + y, -dy + x, -dx + y);
+    }
+
+    SDL_RenderDrawLine(renderer->sdl_renderer, -radius + x, y, radius + x, y);
 
     return 0;
 }
@@ -201,6 +291,8 @@ static const luaL_Reg draw[] = {
     { "line", line },
     { "rect", rect },
     { "fillrect", fillrect },
+    { "circle", circle },
+    { "fillcircle", fillcircle },
     { "texture", texture },
     { "text", text },
     { "textlines", textlines },
